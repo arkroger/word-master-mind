@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-mind-master-python-deployment
+  labels:
+    app: word-mind-master-python
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: word-mind-master-python
+  template:
+    metadata:
+      labels:
+        app: word-mind-master-python
+    spec:
+      nodeSelector:
+        custom-type: "worker"
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: word-mind-master-python
+        imagePullPolicy: Always
+        image: minha-imagem/wmm-python:gevent
+        env:
+          - name: WORKERS
+            value: "1"
+          - name: THREADS
+            value: "2"
+          - name: DB_CONNECTION_STRING
+            value: "postgresql://postgres:mysecretpassword@word-mind-master-postgres-service/postgres"
+          - name: "TZ"
+            value: "America/Sao_Paulo"
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: 900m
+            memory: 400Mi 
+          requests:
+            cpu: 900m
+            memory: 400Mi                    

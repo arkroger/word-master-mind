@@ -12,9 +12,9 @@ WORDS = [
     'PALHA'
 ]
 
-WRONG = 0
-RIGHT = 1
-ANOTHER_POSITION = 2
+WRONG = 'WRONG'
+RIGHT = 'RIGHT'
+ANOTHER_POSITION = 'HALF'
 
 def checkWord(word: str, randomWord: str) -> bool:
     characteres = list(word)
@@ -51,6 +51,13 @@ def isAnotherPosition(char, word, randomWord) -> bool:
 
     return False
 
+def getResultJson(result):
+    resultDict = {}    
+    for index, item in enumerate(result):        
+        resultDict[index] = {'state': item['state']}
+    return resultDict
+        
+
 def showResult(result):    
     for char in result:        
         color = getColor(char['state'])
@@ -75,33 +82,34 @@ def newtry(word: str, randomWord: str) -> bool:
     showResult(result)
     return isSuccess(result)
 
+def console():
 
-count = 1
-max = 5
-letters = 5
-print(f'Você tem {max} tentativas. Boa Sorte!')
-randomWord = generateWord()
-while count<=max:
-    print("===================================")
-    
-    word = input(f'Tentativa {count}/{max}: Qual a palavra: ').upper()
-    if len(word) == letters:
-        success = newtry(word, randomWord)
-        if success:
-            print("\033[92mParabéns, palavra correta")
-            count = max
-        else:
-            if count == max:
-                print(f'\033[91mVocê Perdeu!!!! A palavra correta era \033[93m{randomWord}')
-            
-        count=count+1
+    count = 1
+    max = 5
+    letters = 5
+    print(f'Você tem {max} tentativas. Boa Sorte!')
+    randomWord = generateWord()
+    while count<=max:
+        print("===================================")
         
-    else:
-        print("Digite ao menos 5 letras")    
+        word = input(f'Tentativa {count}/{max}: Qual a palavra: ').upper()
+        if len(word) == letters:
+            success = newtry(word, randomWord)
+            if success:
+                print("\033[92mParabéns, palavra correta")
+                count = max
+            else:
+                if count == max:
+                    print(f'\033[91mVocê Perdeu!!!! A palavra correta era \033[93m{randomWord}')
+                
+            count=count+1
+            
+        else:
+            print("Digite ao menos 5 letras")    
 
 
-#showResult(checkWord('TESTE', generateWord()))
-#showResult(checkWord('SESTE', generateWord()))
-#showResult(checkWord('ATEST', generateWord()))
-#showResult(checkWord('ACSTS', generateWord()))
-#showResult(checkWord('TEST', generateWord()))
+    #showResult(checkWord('TESTE', generateWord()))
+    #showResult(checkWord('SESTE', generateWord()))
+    #showResult(checkWord('ATEST', generateWord()))
+    #showResult(checkWord('ACSTS', generateWord()))
+    #showResult(checkWord('TEST', generateWord()))

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-mind-master-ktor-deployment
+  labels:
+    app: word-mind-master-ktor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: word-mind-master-ktor
+  template:
+    metadata:
+      labels:
+        app: word-mind-master-ktor
+    spec:
+      nodeSelector:
+        custom-type: "worker"
+      containers:
+      - name: word-mind-master-ktor
+        imagePullPolicy: Always
+        image: leandroconte/word-app-netty:latest
+        env:          
+          - name: DATABASE_CONNECTION_URL
+            value: "jdbc:postgresql://word-mind-master-postgres-service/postgres?user=postgres&password=mysecretpassword"
+        ports:        
+        - containerPort: 8000
+        resources:
+          limits:
+            cpu: 900m
+            memory: 600Mi 
+          requests:
+            cpu: 900m
+            memory: 600Mi                    

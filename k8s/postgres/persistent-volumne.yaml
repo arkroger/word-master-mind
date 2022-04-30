@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: word-mind-master-postgres-pv-volume
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: "local-path"
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/k8s/postgres"

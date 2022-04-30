@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-mind-master-postgres-deployment
+  labels:
+    app: word-mind-master-postgres
+spec:  
+  replicas: 1
+  selector:
+    matchLabels:
+      app: word-mind-master-postgres
+  template:
+    metadata:
+      labels:
+        app: word-mind-master-postgres
+    spec:    
+      nodeSelector:
+        custom-type: "master"     
+      volumes:
+      - name: word-mind-master-postgres-pv-storage
+        persistentVolumeClaim:
+          claimName: word-mind-master-postgres-pv-claim
+      containers:
+      - name: word-mind-master-postgres
+        imagePullPolicy: Always
+        image: postgres
+        env:
+          - name: POSTGRES_PASSWORD
+            value: "mysecretpassword"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: word-mind-master-postgres-pv-storage
+        resources:
+          limits:
+            cpu: 700m
+            memory: 500Mi 
+          requests:
+            cpu: 700m
+            memory: 500Mi                    
